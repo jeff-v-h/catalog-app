@@ -37,3 +37,8 @@ def editItem(item):
 @app.route('/catalog/<string:item>/delete')
 def deleteItem(item):
 	return "This is the page to delete an item."
+
+
+if __name__ == '__main__':
+	app.debug = True
+	app.run(host='0.0.0.0', port=8000)
