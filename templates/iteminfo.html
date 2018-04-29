@@ -2,14 +2,13 @@
 {% block title %} Item {% endblock %}
 {% block content %}
 	<div>
-		<h2>{{Item here}}</h2>
+		<h2>{{item.name}}</h2>
 		<div>
-			{description}
+			{{item.description}}
 		</div>
 		<div>
 			<div><a href="#">Edit</a></div>
 			<div><a href="#">Delete</a></div>
 		</div>
 	</div>
-{% endblock %}
 {% endblock %}
