@@ -1,5 +1,5 @@
 from db_model import Base, Item
-from flask import Flask, jsonify, request, url_for, g
+from flask import Flask, render_template, jsonify, request, redirect, url_for, g
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -27,7 +27,7 @@ def newItem():
 		newItem = Item(name = request.form['name'], category = request.form['category'], description = request.form['description'])
 		session.add(newItem)
 		session.commit()
-		return redirect(url_for('itemInfo', category=newItem.category, item=newItem))
+		return redirect(url_for('catalog')) #redirect(url_for('itemInfo', category=newItem.category, item=newItem))
 
 # Page for viewing all items within a category
 @app.route('/catalog/<string:category>/items/', methods=['GET'])
@@ -37,7 +37,8 @@ def categoryList(category):
 # Page for viewing a specific item (with edit and delete items if logged in)
 @app.route('/catalog/<string:category>/<string:item>/', methods=['GET'])
 def itemInfo(category, item):
-	return render_template('iteminfo.html')
+	item = session.query(Item).filter_by(id = item.id).one()
+	return render_template('iteminfo.html', item=item)
 
 # Page to edit an item (must be logged in)
 @app.route('/catalog/<string:item>/edit/', methods=['GET', 'PUT'])
