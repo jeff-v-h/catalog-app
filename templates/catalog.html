@@ -5,15 +5,15 @@
 		<div>
 			<h2>Categories</h2>
 			<ul>
-				{% for c in categories %}
-				<li><a href="#">{{c.category.title()}}</a></li>
+				{% for i in items_grouped_by_category %}
+				<li><a href="{{url_for('categoryList', category=i.category)}}">{{i.category.title()}}</a></li>
 				{% endfor %}
 			</ul>
 		</div>
 		<div>
 			<div>
 				<h2>Latest Items</h2>
-				<div><a href="#">Add Item</a></div>	
+				<div><a href="{{url_for('newItem')}}">Add Item</a></div>	
 			</div>
 			<div>
 				<ul>

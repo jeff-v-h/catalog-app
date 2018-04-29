@@ -15,13 +15,14 @@ app = Flask(__name__)
 # Routes/pages
 # Main page showing the list of categories and latest items (add item button if logged in)
 @app.route('/', methods=['GET', 'POST'])
+@app.route('/catalog/', methods=['GET', 'POST'])
 def catalog():
-	categories = session.query(Item).group_by(Item.category).all()
+	items_grouped_by_category = session.query(Item).group_by(Item.category).all()
 	items = session.query(Item).all()
 	if request.method == 'POST':
 		return jsonify(items = [i.serialize for i in items])
 	else:
-		return render_template('catalog.html', categories=categories, items=items)
+		return render_template('catalog.html', items_grouped_by_category=items_grouped_by_category, items=items)
 
 # Page for adding an item (must be logged in)
 @app.route('/catalog/new/', methods=['GET', 'POST'])
@@ -37,7 +38,9 @@ def newItem():
 # Page for viewing all items within a category
 @app.route('/catalog/<string:category>/items/', methods=['GET'])
 def categoryList(category):
-	return render_template('categorylist.html')
+	items_grouped_by_category = session.query(Item).group_by(Item.category).all()
+	items_for_category = session.query(Item).filter_by(category = category).all()
+	return render_template('categorylist.html', items_grouped_by_category=items_grouped_by_category, category=category, items=items_for_category)
 
 # Page for viewing a specific item (with edit and delete items if logged in)
 @app.route('/catalog/<string:category>/<string:item>/', methods=['GET'])

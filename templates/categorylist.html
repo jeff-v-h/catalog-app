@@ -5,28 +5,26 @@
 		<div>
 			<h2>Categories</h2>
 			<ul>
-				<li>Basketball</li>
-				<li>Soccer</li>
-				<li>Tennis</li>
-				<li>Rugby</li>
-				<li>Swimming</li>
-				<li>Snowboarding</li>
+				{% for i in items_grouped_by_category %}
+				<li><a href="categoryList, category=i.category">{{i.category.title()}}</a></li>
+				{% endfor %}
 			</ul>
 		</div>
 		<div>
 			<div>
-				<h2>Category Selected</h2>
-				<div><a href="#">Add Item</a></div>	
+				<h2>{{category.title()}}</h2>
+				<div><a href="{{url_for('newItem')}}">Add Item</a></div>
 			</div>
 			<div>
 				<ul>
-					<li>NBA Basketball</li>
-					<li>Basketball Shoes</li>
-					<li>Jersey</li>
-					<li>socks</li>
-					<li>ankle brace</li>
+					{% for i in items %}
+					<li><a href="{{url_for('itemInfo', category=i.category, item=i)}}">{{i.name.title()}}</a></li>
+					{% endfor %}
 				</ul>
 			</div>
+		</div>
+		<div>
+			<div><a href="{{url_for('catalog')}}">back</a></div>
 		</div>
 	</div>
 {% endblock %}
