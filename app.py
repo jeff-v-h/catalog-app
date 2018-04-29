@@ -14,32 +14,32 @@ app = Flask(__name__)
 
 # Routes/pages
 # Main page showing the list of categories and latest items (add item button if logged in)
-@app.route('/')
+@app.route('/', methods=['GET'])
 def catalog():
 	return "This is the main page."
 
 # Page for adding an item (must be logged in)
-@app.route('/catalog/new/')
+@app.route('/catalog/new/', methods=['GET', 'POST'])
 def newItem():
 	return "This is a page to add an item."
 
 # Page for viewing all items within a category
-@app.route('/catalog/<string:category>/items/')
+@app.route('/catalog/<string:category>/items/', methods=['GET'])
 def categoryList(category):
 	return "This is a category page."
 
 # Page for viewing a specific item (with edit and delete items if logged in)
-@app.route('/catalog/<string:category>/<string:item>/')
+@app.route('/catalog/<string:category>/<string:item>/', methods=['GET'])
 def itemInfo(category, item):
 	return "This is a page for an item."
 
 # Page to edit an item (must be logged in)
-@app.route('/catalog/<string:item>/edit/')
+@app.route('/catalog/<string:item>/edit/', methods=['GET', 'POST'])
 def editItem(item):
 	return "This is the page to edit an item."
 
 # Page to confirming deletion of an item (must be logged in)
-@app.route('/catalog/<string:item>/delete')
+@app.route('/catalog/<string:item>/delete', methods=['GET', 'POST'])
 def deleteItem(item):
 	return "This is the page to delete an item."
 
