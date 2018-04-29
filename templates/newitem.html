@@ -1,0 +1,29 @@
+{% extends "baselayout.html" %}
+{% block title %}  {% endblock %}
+{% block content %}
+	<div>
+		<h2>New Item</h2>
+		<form action="{{url_for('newItem')}}" method="post" id="new-item-form">
+			<div>
+				<label for="name">Item name:</label>
+				<input type="text" name="name">
+			</div>
+			<div>
+				<label for="description">Description:</label>
+				<textarea name="description" form="new-item-form"></textarea>
+			</div>
+			<div>
+				<label for="category">Category:</label>
+				<select name="category">
+					<option value="basketball">Basketball</option>
+					<option value="soccer">Soccer</option>
+					<option value="tennis">Tennis</option>
+					<option value="rugby">Rugby</option>
+					<option value="swimming">Swimming</option>
+					<option value="snowboarding">Snowboarding</option>
+				</select>
+			</div>
+		</form>
+	</div>
+{% endblock %}
+{% endblock %}
