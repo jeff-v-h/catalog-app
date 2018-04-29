@@ -1,4 +1,4 @@
-from db_model import Item
+from db_model import Base, Item
 from flask import Flask, jsonify, request, url_for, g
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -34,7 +34,7 @@ def itemInfo(category, item):
 	return "This is a page for an item."
 
 # Page to edit an item (must be logged in)
-@app.route('/catalog/<string:item>/edit/', methods=['GET', 'POST'])
+@app.route('/catalog/<string:item>/edit/', methods=['GET', 'PUT'])
 def editItem(item):
 	return "This is the page to edit an item."
 
