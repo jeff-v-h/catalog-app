@@ -1,16 +1,16 @@
 {% extends "baselayout.html" %}
-{% block title %} New Catalog Item {% endblock %}
+{% block title %} Edit Catalog Item {% endblock %}
 {% block content %}
 	<div>
-		<h2>New Item</h2>
-		<form action="{{url_for('newItem')}}" method="post" id="new-item-form">
+		<h2>Edit Item</h2>
+		<form action="{{url_for('editItem')}}" method="post" id="edit-item-form">
 			<div>
 				<label for="name">Item name:</label>
 				<input type="text" name="name">
 			</div>
 			<div>
 				<label for="description">Description:</label>
-				<textarea name="description" form="new-item-form"></textarea>
+				<textarea name="description" form="edit-item-form"></textarea>
 			</div>
 			<div>
 				<label for="category">Category:</label>
@@ -23,6 +23,7 @@
 					<option value="snowboarding">Snowboarding</option>
 				</select>
 			</div>
+			<div>save</div>
 		</form>
 		<div>
 			<div><a href="#">cancel</a></div>
