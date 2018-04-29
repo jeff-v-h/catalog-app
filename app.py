@@ -1,5 +1,5 @@
 from db_model import Base, Item
-from flask import Flask, render_template, jsonify, request, redirect, url_for, g
+from flask import Flask, render_template, json, jsonify, request, redirect, url_for, g
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -14,9 +14,14 @@ app = Flask(__name__)
 
 # Routes/pages
 # Main page showing the list of categories and latest items (add item button if logged in)
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'POST'])
 def catalog():
-	return render_template('catalog.html')
+	categories = session.query(Item).group_by(Item.category).all()
+	items = session.query(Item).all()
+	if request.method == 'POST':
+		return jsonify(items = [i.serialize for i in items])
+	else:
+		return render_template('catalog.html', categories=categories, items=items)
 
 # Page for adding an item (must be logged in)
 @app.route('/catalog/new/', methods=['GET', 'POST'])

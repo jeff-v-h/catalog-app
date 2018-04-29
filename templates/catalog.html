@@ -5,12 +5,9 @@
 		<div>
 			<h2>Categories</h2>
 			<ul>
-				<li><a href="#">Basketball</a></li>
-				<li><a href="#">Soccer</a></li>
-				<li><a href="#">Tennis</a></li>
-				<li><a href="#">Rugby</a></li>
-				<li><a href="#">Swimming</a></li>
-				<li><a href="#">Snowboarding</a></li>
+				{% for c in categories %}
+				<li><a href="#">{{c.category.title()}}</a></li>
+				{% endfor %}
 			</ul>
 		</div>
 		<div>
@@ -20,13 +17,9 @@
 			</div>
 			<div>
 				<ul>
-					<li><a href="#">NBA Basketball</a></li>
-					<li><a href="#">Basketball Shoes</a></li>
-					<li><a href="#">Shin guards</a></li>
-					<li><a href="#">Tennis racket</a></li>
-					<li><a href="#">Rugby ball</a></li>
-					<li><a href="#">Swimming goggles</a></li>
-					<li><a href="#">Endeavour Snowboard</a></li>
+					{% for i in items %}
+					<li><a href="{{url_for('itemInfo', category=i.category, item=i)}}">{{i.name.title()}}</a></li>
+					{% endfor %}
 				</ul>
 			</div>
 		</div>
