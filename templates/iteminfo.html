@@ -7,7 +7,7 @@
 			{{item.description}}
 		</div>
 		<div>
-			<div><a href="#">Edit</a></div>
+			<div><a href="{{url_for('editItem', item_name=item.name, item_id=item.id)}}">Edit</a></div>
 			<div><a href="#">Delete</a></div>
 		</div>
 		<div>

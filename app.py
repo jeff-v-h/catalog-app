@@ -43,19 +43,20 @@ def categoryList(category):
 	return render_template('categorylist.html', items_grouped_by_category=items_grouped_by_category, category=category, items=items_for_category)
 
 # Page for viewing a specific item (with edit and delete items if logged in)
-@app.route('/catalog/<string:category>/<string:item>/', methods=['GET'])
-def itemInfo(category, item):
-	item = session.query(Item).filter_by(id = item.id).one()
+@app.route('/catalog/<string:category>/<string:item_name>/<int:item_id>', methods=['GET'])
+def itemInfo(category, item_name, item_id):
+	item = session.query(Item).filter_by(id = item_id).one()
 	return render_template('iteminfo.html', item=item)
 
 # Page to edit an item (must be logged in)
-@app.route('/catalog/<string:item>/edit/', methods=['GET', 'PUT'])
-def editItem(item):
-	return render_template('edititem.html')
+@app.route('/catalog/<string:item_name>/<int:item_id>/edit/', methods=['GET', 'PUT'])
+def editItem(item_name, item_id):
+	item = session.query(Item).filter_by(id = item_id).one()
+	return render_template('edititem.html', item=item)
 
 # Page to confirming deletion of an item (must be logged in)
-@app.route('/catalog/<string:item>/delete', methods=['GET', 'POST'])
-def deleteItem(item):
+@app.route('/catalog/<string:item_name>/<int:item_id>/delete', methods=['GET', 'POST'])
+def deleteItem(item_name, item_id):
 	return render_template('deleteitem.html')
 
 
