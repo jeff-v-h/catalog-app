@@ -57,7 +57,8 @@ def editItem(item_name, item_id):
 # Page to confirming deletion of an item (must be logged in)
 @app.route('/catalog/<string:item_name>/<int:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(item_name, item_id):
-	return render_template('deleteitem.html')
+	item = session.query(Item).filter_by(id = item_id).one()
+	return render_template('deleteitem.html', item=item)
 
 
 if __name__ == '__main__':
