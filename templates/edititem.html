@@ -5,18 +5,18 @@
 		<h2>Edit Item</h2>
 		<form action="{{url_for('editItem', item_name=item.name, item_id=item.id)}}" method="post" id="edit-item-form">
 			<div>
-				<label for="name">Item name:</label>
-				<input type="text" name="name">
+				<label for="name">Name:</label>
+				<input type="text" name="name" value="{{item.name}}">
 			</div>
 			<div>
 				<label for="description">Description:</label>
-				<textarea name="description" form="edit-item-form"></textarea>
+				<textarea name="description" form="edit-item-form">{{item.description}}</textarea>
 			</div>
 			<div>
 				<label for="category">Category:</label>
 				<select name="category">
 					<option value="basketball">Basketball</option>
-					<option value="soccer">Soccer</option>
+					<option value="soccer" {% if item.category=='soccer' %} selected="selected" {% endif %}>Soccer</option>
 					<option value="tennis">Tennis</option>
 					<option value="rugby">Rugby</option>
 					<option value="swimming">Swimming</option>
