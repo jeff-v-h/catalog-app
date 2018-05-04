@@ -49,13 +49,24 @@ def itemInfo(category, item_name, item_id):
 	return render_template('iteminfo.html', item=item)
 
 # Page to edit an item (must be logged in)
-@app.route('/catalog/<string:item_name>/<int:item_id>/edit/', methods=['GET', 'PUT'])
+@app.route('/catalog/<string:item_name>/<int:item_id>/edit/', methods=['GET', 'POST'])
 def editItem(item_name, item_id):
 	item = session.query(Item).filter_by(id = item_id).one()
-	return render_template('edititem.html', item=item)
+	if request.method == 'GET':
+		return render_template('edititem.html', item=item)
+	if request.method == 'POST':
+		if  request.form['name'] and request.form['description']:
+			item.name = request.form['name']
+			item.description = request.form['description']
+			item.category = request.form['category']
+			session.add(item)
+			session.commit()
+		else:
+			print "fields for name and description required."
+		return redirect(url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id))
 
 # Page to confirming deletion of an item (must be logged in)
-@app.route('/catalog/<string:item_name>/<int:item_id>/delete', methods=['GET', 'POST'])
+@app.route('/catalog/<string:item_name>/<int:item_id>/delete', methods=['GET', 'DELETE'])
 def deleteItem(item_name, item_id):
 	item = session.query(Item).filter_by(id = item_id).one()
 	return render_template('deleteitem.html', item=item)

@@ -7,10 +7,10 @@
 			<div>
 				Are you sure you want to delete {{item.name}}?
 			</div>
-			<div>submit</div>
+			<div><input type="submit" name="Submit"></div>
 		</form>
 		<div>
-			<div><a href="{{url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id)}}">cancel</a></div>
+			<div><a href="{{url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id)}}">Cancel</a></div>
 		</div>
 	</div>
 {% endblock %}
