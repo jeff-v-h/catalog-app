@@ -7,20 +7,20 @@ from passlib.apps import custom_app_context as pwd_context
 Base = declarative_base()
 
 class Item(Base):
-	__tablename__ = 'item'
-	id = Column(Integer, primary_key=True)
-	name = Column(String)
-	category = Column(String)
-	description = Column(String)
+    __tablename__ = 'item'
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    category = Column(String)
+    description = Column(String)
 
-	@property
-	def serialize(self):
-		"""Return object data in easily serializeable format"""
-		return {
-		'name' : self.name,
-		'category' : self.category,
-		'description' : self.description
-		}
+    @property
+    def serialize(self):
+        """Return object data in easily serializeable format"""
+        return {
+        'name' : self.name,
+        'category' : self.category,
+        'description' : self.description
+        }
 
 engine = create_engine('sqlite:///itemCatalog.db')
  

@@ -1,43 +1,43 @@
 {% extends "baselayout.html" %}
 {% block title %} Edit Catalog Item {% endblock %}
 {% block content %}
-	<div>
-		{% with messages = get_flashed_messages() %}
-		{% if messages %}
-		<ul>
-			{% for message in messages %}
-			<li><strong>{{message}}</strong></li>
-			{% endfor %}
-		</ul>
-		{% endif %}
-		{% endwith %}
-	</div>
-	<div>
-		<h2>Edit Item</h2>
-		<form action="{{url_for('editItem', item_name=item.name, item_id=item.id)}}" method="post" id="edit-item-form">
-			<div>
-				<label for="name">Name:</label>
-				<input type="text" name="name" value="{{item.name}}">
-			</div>
-			<div>
-				<label for="description">Description:</label>
-				<textarea name="description" form="edit-item-form">{{item.description}}</textarea>
-			</div>
-			<div>
-				<label for="category">Category:</label>
-				<select name="category">
-					<option value="basketball">Basketball</option>
-					<option value="soccer" {% if item.category=='soccer' %} selected="selected" {% endif %}>Soccer</option>
-					<option value="tennis" {% if item.category=='tennis' %} selected="selected" {% endif %}>Tennis</option>
-					<option value="rugby" {% if item.category=='rugby' %} selected="selected" {% endif %}>Rugby</option>
-					<option value="swimming" {% if item.category=='swimming' %} selected="selected" {% endif %}>Swimming</option>
-					<option value="snowboarding" {% if item.category=='snowboarding' %} selected="selected" {% endif %}>Snowboarding</option>
-				</select>
-			</div>
-			<div><input type="submit" name="Save"></div>
-		</form>
-		<div>
-			<div><a href="{{url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id)}}">Cancel</a></div>
-		</div>
-	</div>
+    <div>
+        {% with messages = get_flashed_messages() %}
+        {% if messages %}
+        <ul>
+            {% for message in messages %}
+            <li><strong>{{message}}</strong></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
+    <div>
+        <h2>Edit Item</h2>
+        <form action="{{url_for('editItem', item_name=item.name, item_id=item.id)}}" method="post" id="edit-item-form">
+            <div>
+                <label for="name">Name:</label>
+                <input type="text" name="name" value="{{item.name}}">
+            </div>
+            <div>
+                <label for="description">Description:</label>
+                <textarea name="description" form="edit-item-form">{{item.description}}</textarea>
+            </div>
+            <div>
+                <label for="category">Category:</label>
+                <select name="category">
+                    <option value="basketball">Basketball</option>
+                    <option value="soccer" {% if item.category=='soccer' %} selected="selected" {% endif %}>Soccer</option>
+                    <option value="tennis" {% if item.category=='tennis' %} selected="selected" {% endif %}>Tennis</option>
+                    <option value="rugby" {% if item.category=='rugby' %} selected="selected" {% endif %}>Rugby</option>
+                    <option value="swimming" {% if item.category=='swimming' %} selected="selected" {% endif %}>Swimming</option>
+                    <option value="snowboarding" {% if item.category=='snowboarding' %} selected="selected" {% endif %}>Snowboarding</option>
+                </select>
+            </div>
+            <div><input type="submit" name="Save"></div>
+        </form>
+        <div>
+            <div><a href="{{url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id)}}">Cancel</a></div>
+        </div>
+    </div>
 {% endblock %}
