@@ -66,11 +66,15 @@ def editItem(item_name, item_id):
 		return redirect(url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id))
 
 # Page to confirming deletion of an item (must be logged in)
-@app.route('/catalog/<string:item_name>/<int:item_id>/delete', methods=['GET', 'DELETE'])
+@app.route('/catalog/<string:item_name>/<int:item_id>/delete', methods=['GET', 'POST'])
 def deleteItem(item_name, item_id):
 	item = session.query(Item).filter_by(id = item_id).one()
-	return render_template('deleteitem.html', item=item)
-
+	if request.method == 'GET':
+		return render_template('deleteitem.html', item=item)
+	if request.method == 'POST':
+		session.delete(item)
+		session.commit()
+		return redirect(url_for('categoryList', category=item.category))
 
 if __name__ == '__main__':
 	app.debug = True
