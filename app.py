@@ -1,5 +1,5 @@
 from db_model import Base, Item
-from flask import Flask, render_template, json, jsonify, request, redirect, url_for, g
+from flask import Flask, render_template, json, jsonify, request, redirect, url_for, flash, g
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -34,9 +34,11 @@ def newItem():
 			newItem = Item(name = request.form['name'], category = request.form['category'], description = request.form['description'])
 			session.add(newItem)
 			session.commit()
+			flash("New item created: " + newItem.name)
 			return redirect(url_for('itemInfo', category=newItem.category, item_name=newItem.name, item_id=newItem.id))
 		else:
 			print "All fields required."
+			flash("ERROR: All fields need to be populated.")
 			return render_template('newitem.html')
 
 # Page for viewing all items within a category
@@ -65,9 +67,12 @@ def editItem(item_name, item_id):
 			item.category = request.form['category']
 			session.add(item)
 			session.commit()
+			flash(item.name + " edited successfully.")
+			return redirect(url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id))
 		else:
 			print "fields for name and description required."
-		return redirect(url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id))
+			flash("ERROR: All fields need to be populated.")
+			return redirect(url_for('editItem', item_name=item.name, item_id=item.id))
 
 # Page to confirming deletion of an item (must be logged in)
 @app.route('/catalog/<string:item_name>/<int:item_id>/delete', methods=['GET', 'POST'])
@@ -78,8 +83,10 @@ def deleteItem(item_name, item_id):
 	if request.method == 'POST':
 		session.delete(item)
 		session.commit()
+		flash(item.name + " deleted successfully.")
 		return redirect(url_for('categoryList', category=item.category))
 
 if __name__ == '__main__':
+	app.secret_key = 'catalog_secret_key'
 	app.debug = True
 	app.run(host='0.0.0.0', port=8000)

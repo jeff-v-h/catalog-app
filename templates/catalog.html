@@ -3,6 +3,17 @@
 {% block content %}
 	<div>
 		<div>
+			{% with messages = get_flashed_messages() %}
+			{% if messages %}
+			<ul>
+				{% for message in messages %}
+				<li><strong>{{message}}</strong></li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+			{% endwith %}
+		</div>
+		<div>
 			<h2>Categories</h2>
 			<ul>
 				{% for i in items_grouped_by_category %}
