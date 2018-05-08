@@ -30,13 +30,14 @@ def newItem():
 	if request.method == 'GET':
 		return render_template('newitem.html')
 	if request.method == 'POST':
-		if request.form['name'] and request.form['category']:
+		if request.form['name'] and request.form['description']:
 			newItem = Item(name = request.form['name'], category = request.form['category'], description = request.form['description'])
 			session.add(newItem)
 			session.commit()
 			return redirect(url_for('itemInfo', category=newItem.category, item_name=newItem.name, item_id=newItem.id))
 		else:
 			print "All fields required."
+			return render_template('newitem.html')
 
 # Page for viewing all items within a category
 @app.route('/catalog/<string:category>/items/', methods=['GET'])
