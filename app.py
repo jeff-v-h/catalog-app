@@ -2,6 +2,8 @@ from db_model import Base, Item
 from flask import (
     Flask, render_template, json, jsonify, request, redirect,
     url_for, flash, g)
+from flask import session as login_session
+import random, string
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -12,6 +14,16 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 app = Flask(__name__)
+
+
+# Create a state token to prevent request forgery
+# Store it in the session for later validation
+@app.route('/login')
+def showLogin():
+    state = ''.join(random.choice(
+        string.ascii_uppercase + string.digits) for x in xrange(32))
+    login_session['state'] = state
+    return "The current session state is %s" % login_session['state']
 
 
 # JSON API endpoints
