@@ -1,5 +1,9 @@
 {% extends "baselayout.html" %}
 {% block title %} Login - Catalog App {% endblock %}
+{% block head %}
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="469015793642-ark5nuol7c21nkg06ao3e6kjobl09ab1.apps.googleusercontent.com">
+{% endblock %}
 {% block content %}
     <div>
         <h2>Login Page</h2>
@@ -14,9 +18,35 @@
             {% endif %}
             {% endwith %}
         </div>
-        <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+        <div class="g-signin2"
+        data-onsuccess="onSignIn"
+        data-theme="dark"
+        data-scope="openid"
+        data-clientid="469015793642-ark5nuol7c21nkg06ao3e6kjobl09ab1.apps.googleusercontent.com"
+        data-redirecturi="postmessage"
+        data-accesstype="offline"
+        data-cookiepolicy="single_host_origin"
+        data-callback="signInCallback"></div>
         <div>
             <div><a href="{{url_for('catalog')}}">homepage</a></div>
         </div>
     </div>
+{% endblock %}
+{% block scripts %}
+    <script>
+        function onSignIn(googleUser) {
+            // Useful data for your client-side scripts:
+            var profile = googleUser.getBasicProfile();
+            console.log("ID: " + profile.getId()); // Don't send this directly to your server!
+            console.log('Full Name: ' + profile.getName());
+            console.log('Given Name: ' + profile.getGivenName());
+            console.log('Family Name: ' + profile.getFamilyName());
+            console.log("Image URL: " + profile.getImageUrl());
+            console.log("Email: " + profile.getEmail());
+
+            // The ID token you need to pass to your backend:
+            var id_token = googleUser.getAuthResponse().id_token;
+            console.log("ID Token: " + id_token);
+        };
+    </script>
 {% endblock %}
