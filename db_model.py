@@ -7,10 +7,17 @@ from passlib.apps import custom_app_context as pwd_context
 Base = declarative_base()
 
 
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key=True)
+    username = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+
+
 class Item(Base):
     __tablename__ = 'item'
     id = Column(Integer, primary_key=True)
-    name = Column(String)
+    name = Column(String, nullable=False)
     category = Column(String)
     description = Column(String)
 
@@ -22,7 +29,7 @@ class Item(Base):
             'name': self.name,
             'category': self.category,
             'description': self.description
-            }
+        }
 
 engine = create_engine('sqlite:///itemCatalog.db')
 
