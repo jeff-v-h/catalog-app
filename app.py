@@ -1,5 +1,6 @@
 from db_model import Base, Item
-from flask import Flask, render_template, json, jsonify, request, redirect, url_for, flash, g
+from flask import (Flask, render_template, json, jsonify, request, redirect, 
+url_for, flash, g)
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -10,6 +11,25 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 app = Flask(__name__)
+
+# JSON API endpoints
+# JSON API for all items in the catalog
+@app.route('/catalog/JSON')
+def catalogJSON():
+    items = session.query(Item).all()
+    return jsonify(items=[i.serialize for i in items])
+
+# JSON API for all items in a specific category
+@app.route('/catalog/<string:category>/JSON')
+def categoryJSON(category):
+    items_for_category = session.query(Item).filter_by(category=category).all()
+    return jsonify(items_for_category=[i.serialize for i in items_for_category])
+
+# JSON API for a specific item. Both name and id required in case there are items of same name
+@app.route('/catalog/<string:item_name>/<int:item_id>/JSON')
+def itemJSON(item_name, item_id):
+    item = session.query(Item).filter_by(id=item_id).one()
+    return jsonify(item=item.serialize)
 
 
 # Routes/pages
