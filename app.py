@@ -115,6 +115,49 @@ def gconnect():
     return output
 
 
+# Disconnect - Revoke a current user's token and reset their login_session
+@app.route("/gdisconnect")
+def gdisconnect():
+    # Only disconnect a connected user.
+    access_token = login_session['access_token']
+    if access_token is None:
+        print 'Access token is None'
+        response = make_response(
+            json.dumps('Current user not connected.'), 401)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+    # Execute HTTP GET request to revoke current token
+    ''' method shown on google developers identity platform
+    revoke = requests.post('https://accounts.google.com/o/oauth2/revoke',
+        params={'token': access_token},
+        headers={'content-type': 'application/x-www-form-urlencoded'})
+
+    status_code = getattr(revoke, 'status_code')'''
+    url = ('https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token)
+    h = httplib2.Http()
+    result = h.request(url, 'GET')[0]
+
+    if result['status'] == '200':
+    # if status_code == 200:
+        # Reset the user's session.
+        del login_session['access_token']
+        del login_session['gplus_id']
+        del login_session['username']
+        del login_session['email']
+        del login_session['picture']
+
+        response = make_response(json.dumps('Successfully disconnected.'), 200)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+    else:
+        # For whatever reason, the given token was invalid.
+        response = make_response(
+            json.dumps('Failed to revoke token for given user.'), 400)
+        response.headers['Content-Type'] = 'application/json'
+        return response
+
+
 # JSON API endpoints
 # JSON API for all items in the catalog
 @app.route('/catalog/JSON')
