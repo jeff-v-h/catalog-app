@@ -1,8 +1,11 @@
 {% extends "baselayout.html" %}
 {% block title %} Login - Catalog App {% endblock %}
 {% block head %}
+<!-- Meta tags used with g-signin2
     <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="469015793642-ark5nuol7c21nkg06ao3e6kjobl09ab1.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="1005629537182-3f341slqironilqum4cbumhj97o5f9c1.apps.googleusercontent.com"> -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script src="//apis.google.com/js/platform.js?onload=start" async defer></script>
 {% endblock %}
 {% block content %}
     <div>
@@ -18,25 +21,28 @@
             {% endif %}
             {% endwith %}
         </div>
+        <div id="signinButton">
+            <!-- data-onsuccess="onSignIn" and class="g-signin2" used for g-signin2 -->
+            <span class="g-signin"
+                data-theme="dark"
+                data-scope="openid email"
+                data-clientid="1005629537182-3f341slqironilqum4cbumhj97o5f9c1.apps.googleusercontent.com"
+                data-redirecturi="postmessage"
+                data-accesstype="offline"
+                data-cookiepolicy="single_host_origin"
+                data-callback="signInCallback"
+                data-approvalprompt="force">
+            </span>
+        </div>
         <div id="result"></div>
-        <div id="signinButton" 
-        class="g-signin2"
-        data-onsuccess="onSignIn"
-        data-theme="dark"
-        data-scope="openid"
-        data-clientid="469015793642-ark5nuol7c21nkg06ao3e6kjobl09ab1.apps.googleusercontent.com"
-        data-redirecturi="postmessage"
-        data-accesstype="offline"
-        data-cookiepolicy="single_host_origin"
-        data-callback="signInCallback"></div>
         <div>
             <div><a href="{{url_for('catalog')}}">homepage</a></div>
         </div>
     </div>
 {% endblock %}
 {% block scripts %}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script>
+        /* This function is used with g-signin2
         function onSignIn(googleUser) {
             // Useful data for your client-side scripts:
             var profile = googleUser.getBasicProfile();
@@ -50,7 +56,7 @@
             // The ID token you need to pass to your backend:
             var id_token = googleUser.getAuthResponse().id_token;
             console.log("ID Token: " + id_token);
-        };
+        }; */
 
         function signInCallback(authResult) {
             if (authResult['code']) {
@@ -62,7 +68,7 @@
                     url: '/gconnect?state={{STATE}}',
                     processData: false,
                     contentType: 'application/octet-stream; charset=utf-8',
-                    data: authresult['code'],
+                    data: authResult['code'],
                     success: function(result) {
                         if (result) {
                             $('#result').html('Login Successful!</br>' + result + '</br>Redirecting...')
