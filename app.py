@@ -61,7 +61,7 @@ def gconnect():
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
-        response = make_response(json.dumps(result.get('error')), 50)
+        response = make_response(json.dumps(result.get('error')), 500)
         response.headers['Content-Type'] = 'application/json'
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
@@ -85,18 +85,15 @@ def gconnect():
         response = make_response(
             json.dumps('Current user is already connected.'), 200)
         response.headers['Content-Type'] = 'application/json'
+        return response
 
-    # Store the access token in the session for later use. May need to store
-    # access token instead of credentials depending on version of flask.
+    # Store the access token in the session for later use.
     login_session['access_token'] = credentials.access_token
-    # login_session['credentials'] = credentials
     login_session['gplus_id'] = gplus_id
     # Get user info
-    userinfo_url = "https://googleapis.com/oauth2/v1/userinfo"
+    userinfo_url = "https://www.googleapis.com/oauth2/v1/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
     answer = requests.get(userinfo_url, params=params)
-    print "checkkkkkkkkkkkkkkkkkk"
-    print answer
     data = answer.json()
 
     # store info from data into login session
@@ -107,7 +104,7 @@ def gconnect():
     # return a welcome page including info stored from user's data
     # also return flash message to let them know their login was successful
     output = ''
-    output += '<h1>Welcome, '
+    output = '<h1>Welcome, '
     output += login_session['username']
     output += '!</h1>'
     output += '<img src="'
