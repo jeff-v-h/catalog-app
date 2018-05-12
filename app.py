@@ -253,6 +253,13 @@ def editItem(item_name, item_id):
     if request.method == 'GET':
         return render_template('edititem.html', item=item)
 
+    # No access to edit item if it's not public and wasn't created by the user
+    if item.user_id is not None and login_session['user_id'] != item.user_id:
+        flash('You are not authorised to edit this item.')
+        return redirect(url_for(
+            'iteminfo', category=item.category, item_name=item.name,
+            item_id=item.id))
+
     if request.method == 'POST':
         if request.form['name'] and request.form['description']:
             item.name = request.form['name']
@@ -284,6 +291,13 @@ def deleteItem(item_name, item_id):
     item = session.query(Item).filter_by(id=item_id).one()
     if request.method == 'GET':
         return render_template('deleteitem.html', item=item)
+
+    # No access to delete item if it's not public was not created by the user
+    if item.user_id is not None and login_session['user_id'] != item.user_id:
+        flash('You are not authorised to delete this item.')
+        return redirect(url_for(
+            'iteminfo', category=item.category, item_name=item.name,
+            item_id=item.id))
 
     if request.method == 'POST':
         session.delete(item)
