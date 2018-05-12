@@ -92,6 +92,7 @@ def gconnect():
 
     # if user does not exist in database, add as a new user
     user = session.query(User).filter_by(email=login_session['email']).first()
+    login_session['user_id'] = user.id
     if user is None:
         createUser(login_session)
 
@@ -131,6 +132,7 @@ def gdisconnect():
         del login_session['username']
         del login_session['email']
         del login_session['picture']
+        del login_session['user_id']
 
         flash('Successfully logged out')
         return redirect(url_for('showLogin'))
@@ -204,7 +206,8 @@ def newItem():
                 category=request.form['category'],
                 description=request.form['description'],
                 created_date=datetime.utcnow(),
-                modified_date=datetime.utcnow())
+                modified_date=datetime.utcnow(),
+                user_id=login_session['user_id'])
             session.add(newItem)
             session.commit()
             flash("New item created: " + newItem.name)
