@@ -242,9 +242,14 @@ def itemInfo(category, item_name, item_id):
 @app.route(
     '/catalog/<string:item_name>/<int:item_id>/edit/', methods=['GET', 'POST'])
 def editItem(item_name, item_id):
+    # Redirect to login page if there is not logged in user
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
+
     item = session.query(Item).filter_by(id=item_id).one()
     if request.method == 'GET':
         return render_template('edititem.html', item=item)
+
     if request.method == 'POST':
         if request.form['name'] and request.form['description']:
             item.name = request.form['name']
@@ -269,9 +274,14 @@ def editItem(item_name, item_id):
     '/catalog/<string:item_name>/<int:item_id>/delete',
     methods=['GET', 'POST'])
 def deleteItem(item_name, item_id):
+    # Redirect to login page if there is not logged in user
+    if 'username' not in login_session:
+        return redirect(url_for('showLogin'))
+
     item = session.query(Item).filter_by(id=item_id).one()
     if request.method == 'GET':
         return render_template('deleteitem.html', item=item)
+
     if request.method == 'POST':
         session.delete(item)
         session.commit()
