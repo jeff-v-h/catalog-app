@@ -8,15 +8,34 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    <div>
-        <a href="{{url_for('catalog')}}"><h1>Catalog App</h1></a>
-        {% if 'email' not in session %}
-        <a href="{{url_for('showLogin')}}"><div>Sign in</div></a>
-        {% else %}
-        <a href="{{url_for('gdisconnect')}}"><div>Sign out</div></a>
-        {% endif %}
+    <div id="header">
+        <div>
+            <a href="{{url_for('catalog')}}"><h1>Catalog App</h1></a>
+            <div id="signInOut">
+                {% if 'email' not in session %}
+                <a href="{{url_for('showLogin')}}"><div>Sign in</div></a>
+                {% else %}
+                <a href="{{url_for('gdisconnect')}}"><div>Sign out</div></a>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    {% block content %}{% endblock %}
+    <div id="content-wrapper">
+        <div id="flash">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <li><strong>{{message}}</strong></li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+        </div>
+        <div id="main-wrapper">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
     {% block scripts %}{% endblock %}
 </body>
 </html>

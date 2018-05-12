@@ -1,38 +1,25 @@
 {% extends "baselayout.html" %}
 {% block title %} Catalog App {% endblock %}
 {% block content %}
-    <div>
+    <div id="category-div">
+        <h2>Categories</h2>
+        <ul>
+            {% for i in items_grouped_by_category %}
+            <li><a href="{{url_for('categoryList', category=i.category)}}">{{i.category.title()}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div id="list-div">
         <div>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <li><strong>{{message}}</strong></li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
+            <h2>Latest Items</h2>
+            <div id="add-item"><a href="{{url_for('newItem')}}">Add Item</a></div>    
         </div>
         <div>
-            <h2>Categories</h2>
             <ul>
-                {% for i in items_grouped_by_category %}
-                <li><a href="{{url_for('categoryList', category=i.category)}}">{{i.category.title()}}</a></li>
+                {% for i in items_latest %}
+                <li><a href="{{url_for('itemInfo', category=i.category, item_name=i.name, item_id=i.id)}}">{{i.name.title()}}</a></li>
                 {% endfor %}
             </ul>
-        </div>
-        <div>
-            <div>
-                <h2>Latest Items</h2>
-                <div><a href="{{url_for('newItem')}}">Add Item</a></div>    
-            </div>
-            <div>
-                <ul>
-                    {% for i in items_latest %}
-                    <li><a href="{{url_for('itemInfo', category=i.category, item_name=i.name, item_id=i.id)}}">{{i.name.title()}}</a></li>
-                    {% endfor %}
-                </ul>
-            </div>
         </div>
     </div>
 {% endblock %}
