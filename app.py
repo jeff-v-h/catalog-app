@@ -132,7 +132,8 @@ def gdisconnect():
         del login_session['email']
         del login_session['picture']
 
-        return jsonify('Successfully disconnected.'), 200
+        flash('Successfully logged out')
+        return redirect(url_for('showLogin'))
     else:
         # For whatever reason, the given token was invalid.
         return jsonify('Failed to revoke token for given user.'), 400
