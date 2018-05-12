@@ -181,13 +181,15 @@ def itemJSON(item_name, item_id):
 @app.route('/catalog/', methods=['GET', 'POST'])
 def catalog():
     items_group_by_category = session.query(Item).group_by(Item.category).all()
-    items = session.query(Item).all()
+    items_latest = session.query(Item).order_by(
+        Item.modified_date.desc()).limit(10).all()
     if request.method == 'POST':
         return jsonify(items=[i.serialize for i in items])
     else:
         return render_template(
             'catalog.html',
-            items_grouped_by_category=items_group_by_category, items=items)
+            items_grouped_by_category=items_group_by_category,
+            items_latest=items_latest)
 
 
 # Page for adding an item (must be logged in)
