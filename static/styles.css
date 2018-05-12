@@ -19,6 +19,15 @@ li {
 	font-size: 18px;
 }
 
+#flash {
+	width: 100%;
+}
+
+#flash ul {
+	width: 50%;
+	margin: 20px auto 0;
+}
+
 /*
  * Top header
  */
@@ -61,14 +70,23 @@ li {
 	justify-content: flex-start;
 }
 
-#main-wrapper div:first-child {
+#category-div {
 	flex-grow: 2
 }
 
-#main-wrapper div:nth-child(2) {
+#list-div {
 	flex-grow: 3
 }
 
 #add-item {
 	float: right;
+}
+
+#btns-div {
+	display: flex;
+}
+
+.btn {
+	margin-top: 10px;
+	margin-right: 20px;
 }

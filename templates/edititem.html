@@ -2,17 +2,6 @@
 {% block title %} Edit Catalog Item {% endblock %}
 {% block content %}
     <div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li><strong>{{message}}</strong></li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-    </div>
-    <div>
         <h2>Edit Item</h2>
         <form action="{{url_for('editItem', item_name=item.name, item_id=item.id)}}" method="post" id="edit-item-form">
             <div>
@@ -20,8 +9,8 @@
                 <input type="text" name="name" value="{{item.name}}">
             </div>
             <div>
-                <label for="description">Description:</label>
-                <textarea name="description" form="edit-item-form">{{item.description}}</textarea>
+                <label for="description">Description:</label></br>
+                <textarea name="description" form="edit-item-form" rows="10" cols="50">{{item.description}}</textarea>
             </div>
             <div>
                 <label for="category">Category:</label>
@@ -34,10 +23,10 @@
                     <option value="snowboarding" {% if item.category=='snowboarding' %} selected="selected" {% endif %}>Snowboarding</option>
                 </select>
             </div>
-            <div><input type="submit" name="Save"></div>
+            <div class="btn"><input type="submit" name="Save"></div>
         </form>
         <div>
-            <div><a href="{{url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id)}}">Cancel</a></div>
+            <div class="btn"><a href="{{url_for('itemInfo', category=item.category, item_name=item.name, item_id=item.id)}}">Cancel</a></div>
         </div>
     </div>
 {% endblock %}

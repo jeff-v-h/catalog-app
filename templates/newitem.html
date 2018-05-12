@@ -2,17 +2,6 @@
 {% block title %} New Catalog Item {% endblock %}
 {% block content %}
     <div>
-        {% with messages = get_flashed_messages() %}
-        {% if messages %}
-        <ul>
-            {% for message in messages %}
-            <li><strong>{{message}}</strong></li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endwith %}
-    </div>
-    <div>
         <h2>New Item</h2>
         <form action="{{url_for('newItem')}}" method="post" id="new-item-form">
             <div>
@@ -35,11 +24,11 @@
                 </select>
             </div>
             <div>
-                <button>submit</button>
+                <button class="btn">submit</button>
             </div>
         </form>
         <div>
-            <div><a href="{{url_for('catalog')}}">cancel</a></div>
+            <div class="btn"><a href="{{url_for('catalog')}}">cancel</a></div>
         </div>
     </div>
 {% endblock %}

@@ -91,10 +91,13 @@ def gconnect():
     login_session['email'] = data['email']
 
     # if user does not exist in database, add as a new user
+    # Store user id in login session
     user = session.query(User).filter_by(email=login_session['email']).first()
-    login_session['user_id'] = user.id
     if user is None:
-        createUser(login_session)
+        user_id = createUser(login_session)
+        login_session['user_id'] = user_id
+    else:
+        login_session['user_id'] = user.id
 
     # return a welcome page including info stored from user's data
     # also return flash message to let them know their login was successful
@@ -152,6 +155,7 @@ def createUser(login_session):
     user = session.query(User).filter_by(email=login_session['email']).one()
     print "User created with id "
     print user.id
+    return user.id
 
 
 # JSON API endpoints
