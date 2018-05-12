@@ -38,9 +38,8 @@ def showLogin():
 def gconnect():
     # confirm client token sent to server matches token server sent to client
     if request.args.get('state') != login_session['state']:
-        response = make_response(json.dumps('Invalid state'), 401)
-        resonse.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify('Invalid state.'), 401
+
     code = request.data
     try:
         # Upgrade the authorization code into a credentials object
@@ -48,10 +47,7 @@ def gconnect():
         oauth_flow.redirect_uri = 'postmessage'
         credentials = oauth_flow.step2_exchange(code)
     except FlowExchangeError:
-        response = make_response(
-            json.dumps('Failed to upgrade the authorization code.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify('Failed to upgrade the authorization code.'), 401
 
     #Check that the access token is valid
     access_token = credentials.access_token
@@ -61,31 +57,22 @@ def gconnect():
     result = json.loads(h.request(url, 'GET')[1])
     # If there was an error in the access token info, abort.
     if result.get('error') is not None:
-        response = make_response(json.dumps(result.get('error')), 500)
-        response.headers['Content-Type'] = 'application/json'
+        return jsonify(result.get('error')), 500
     # Verify that the access token is used for the intended user.
     gplus_id = credentials.id_token['sub']
     if result['user_id'] != gplus_id:
-        response = make_response(
-            json.dumps("Token's user ID doesn't match given user ID."), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify("Token's user ID doesn't match given user ID."), 401
     # Verify that the access token is valid for this app.
     if result['issued_to'] != CLIENT_ID:
-        response = make_response(
-            json.dumps("Token's client ID does not match app's."), 401)
         print "Token's client ID does not match app's."
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify("Token's client ID does not match app's."), 401
+
     # Check to see if the user is already logged in
     stored_access_token = login_session.get('access_token')
     # stored_credentials = login_session.get('credentials')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
-        response = make_response(
-            json.dumps('Current user is already connected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify('Current user is already connected.'), 200
 
     # Store the access token in the session for later use.
     login_session['access_token'] = credentials.access_token
@@ -122,13 +109,10 @@ def gdisconnect():
     access_token = login_session['access_token']
     if access_token is None:
         print 'Access token is None'
-        response = make_response(
-            json.dumps('Current user not connected.'), 401)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify('Current user not connected.'), 401
 
     # Execute HTTP GET request to revoke current token
-    ''' method shown on google developers identity platform
+    ''' **method shown on google developers identity platform**
     revoke = requests.post('https://accounts.google.com/o/oauth2/revoke',
         params={'token': access_token},
         headers={'content-type': 'application/x-www-form-urlencoded'})
@@ -148,15 +132,10 @@ def gdisconnect():
         del login_session['email']
         del login_session['picture']
 
-        response = make_response(json.dumps('Successfully disconnected.'), 200)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify('Successfully disconnected.'), 200
     else:
         # For whatever reason, the given token was invalid.
-        response = make_response(
-            json.dumps('Failed to revoke token for given user.'), 400)
-        response.headers['Content-Type'] = 'application/json'
-        return response
+        return jsonify('Failed to revoke token for given user.'), 400
 
 
 # JSON API endpoints
