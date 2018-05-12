@@ -12,6 +12,8 @@ from oauth2client.client import FlowExchangeError
 import httplib2
 import json
 import requests
+from datetime import datetime
+
 
 CLIENT_ID = json.loads(
     open('client_secrets.json', 'r').read())['web']['client_id']
@@ -34,6 +36,7 @@ def showLogin():
     return render_template('login.html', STATE=state)
 
 
+# Method to connect to google for user to login with their google account
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
     # confirm client token sent to server matches token server sent to client
@@ -197,7 +200,9 @@ def newItem():
             newItem = Item(
                 name=request.form['name'],
                 category=request.form['category'],
-                description=request.form['description'])
+                description=request.form['description'],
+                created_date=datetime.utcnow(),
+                modified_date=datetime.utcnow())
             session.add(newItem)
             session.commit()
             flash("New item created: " + newItem.name)
@@ -243,6 +248,7 @@ def editItem(item_name, item_id):
             item.name = request.form['name']
             item.description = request.form['description']
             item.category = request.form['category']
+            item.modified_date = datetime.utcnow()
             session.add(item)
             session.commit()
             flash(item.name + " edited successfully.")

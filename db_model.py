@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -21,6 +21,8 @@ class Item(Base):
     name = Column(String, nullable=False)
     category = Column(String)
     description = Column(String)
+    created_date = Column(DateTime, nullable=False)
+    modified_date = Column(DateTime, nullable=False)
 
     @property
     def serialize(self):
