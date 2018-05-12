@@ -1,4 +1,4 @@
-from db_model import Base, Item
+from db_model import Base, User, Item
 from flask import (
     Flask, render_template, json, jsonify, request, redirect,
     url_for, flash, g, make_response)
@@ -69,7 +69,6 @@ def gconnect():
 
     # Check to see if the user is already logged in
     stored_access_token = login_session.get('access_token')
-    # stored_credentials = login_session.get('credentials')
     stored_gplus_id = login_session.get('gplus_id')
     if stored_access_token is not None and gplus_id == stored_gplus_id:
         return jsonify('Current user is already connected.'), 200
@@ -87,6 +86,11 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+
+    # if user does not exist in database, add as a new user
+    user = session.query(User).filter_by(email=login_session['email']).first()
+    if user is None:
+        createUser(login_session)
 
     # return a welcome page including info stored from user's data
     # also return flash message to let them know their login was successful
@@ -137,6 +141,28 @@ def gdisconnect():
     else:
         # For whatever reason, the given token was invalid.
         return jsonify('Failed to revoke token for given user.'), 400
+
+
+# Helper functions
+# Create a new user with login session details
+def createUser(login_session):
+    newUser = User(
+        username=login_session['username'], 
+        email=login_session['email'], 
+        picture=login_session['picture'])
+    session.add(newUser)
+    session.commit()
+    user = session.query(User).filter_by(email=login_session['email']).one()
+    print "User created with id "
+    print user.id
+
+
+# Function to identify if a user is logged in
+def isUserLogged():
+    if 'id' in login_session:
+        return True
+    else:
+        return False
 
 
 # JSON API endpoints
