@@ -134,7 +134,8 @@ def gdisconnect():
         headers={'content-type': 'application/x-www-form-urlencoded'})
 
     status_code = getattr(revoke, 'status_code')'''
-    url = ('https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token)
+    url = ('https://accounts.google.com/o/oauth2/revoke?token=%s' 
+        % access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
