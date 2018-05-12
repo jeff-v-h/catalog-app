@@ -116,19 +116,12 @@ def gdisconnect():
         return jsonify('Current user not connected.'), 401
 
     # Execute HTTP GET request to revoke current token
-    ''' **method shown on google developers identity platform**
-    revoke = requests.post('https://accounts.google.com/o/oauth2/revoke',
-        params={'token': access_token},
-        headers={'content-type': 'application/x-www-form-urlencoded'})
-
-    status_code = getattr(revoke, 'status_code')'''
     url = ('https://accounts.google.com/o/oauth2/revoke?token=%s' 
         % access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
     if result['status'] == '200':
-    # if status_code == 200:
         # Reset the user's session.
         del login_session['access_token']
         del login_session['gplus_id']
@@ -143,8 +136,7 @@ def gdisconnect():
         return jsonify('Failed to revoke token for given user.'), 400
 
 
-# Helper functions
-# Create a new user with login session details
+# Helper function: Create a new user with login session details
 def createUser(login_session):
     newUser = User(
         username=login_session['username'], 
@@ -155,14 +147,6 @@ def createUser(login_session):
     user = session.query(User).filter_by(email=login_session['email']).one()
     print "User created with id "
     print user.id
-
-
-# Function to identify if a user is logged in
-def isUserLogged():
-    if 'id' in login_session:
-        return True
-    else:
-        return False
 
 
 # JSON API endpoints

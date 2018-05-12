@@ -10,8 +10,11 @@
 <body>
     <div>
         <a href="{{url_for('catalog')}}"><h1>Catalog App</h1></a>
+        {% if 'username' not in session %}
         <a href="{{url_for('showLogin')}}"><div>Sign in</div></a>
+        {% else %}
         <a href="{{url_for('gdisconnect')}}"><div>Sign out</div></a>
+        {% endif %}
     </div>
     {% block content %}{% endblock %}
     {% block scripts %}{% endblock %}
