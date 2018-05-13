@@ -1,28 +1,13 @@
 {% extends "baselayout.html" %}
 {% block title %} Login - Catalog App {% endblock %}
 {% block head %}
-<!-- Meta tags used with g-signin2
-    <meta name="google-signin-scope" content="profile email">
-    <meta name="google-signin-client_id" content="1005629537182-3f341slqironilqum4cbumhj97o5f9c1.apps.googleusercontent.com"> -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
     <script src="//apis.google.com/js/platform.js?onload=start" async defer></script>
 {% endblock %}
 {% block content %}
     <div>
         <h2>Login Page</h2>
-        <div>
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            <ul>
-                {% for message in messages %}
-                <li><strong>{{message}}</strong></li>
-                {% endfor %}
-            </ul>
-            {% endif %}
-            {% endwith %}
-        </div>
         <div id="signinButton">
-            <!-- data-onsuccess="onSignIn" and class="g-signin2" used for g-signin2 -->
             <span class="g-signin"
                 data-theme="dark"
                 data-scope="openid email"

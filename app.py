@@ -3,7 +3,8 @@ from flask import (
     Flask, render_template, json, jsonify, request, redirect,
     url_for, flash, g, make_response)
 from flask import session as login_session
-import random, string
+import random
+import string
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
 from sqlalchemy import create_engine
@@ -52,9 +53,10 @@ def gconnect():
     except FlowExchangeError:
         return jsonify('Failed to upgrade the authorization code.'), 401
 
-    #Check that the access token is valid
+    # Check that the access token is valid
     access_token = credentials.access_token
-    url = ('https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
+    url = (
+        'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s'
         % access_token)
     h = httplib2.Http()
     result = json.loads(h.request(url, 'GET')[1])
@@ -123,8 +125,8 @@ def gdisconnect():
         return jsonify('Current user not connected.'), 401
 
     # Execute HTTP GET request to revoke current token
-    url = ('https://accounts.google.com/o/oauth2/revoke?token=%s' 
-        % access_token)
+    url = (
+        'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token)
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
 
@@ -147,8 +149,8 @@ def gdisconnect():
 # Helper function: Create a new user with login session details
 def createUser(login_session):
     newUser = User(
-        username=login_session['username'], 
-        email=login_session['email'], 
+        username=login_session['username'],
+        email=login_session['email'],
         picture=login_session['picture'])
     session.add(newUser)
     session.commit()
@@ -201,6 +203,11 @@ def catalog():
 # Page for adding an item (must be logged in)
 @app.route('/catalog/new/', methods=['GET', 'POST'])
 def newItem():
+    # No access to add item if user not logged in
+    if 'user_id' not in login_session:
+        flash('You need to log in to add an item.')
+        return redirect(url_for('showLogin'))
+
     if request.method == 'GET':
         return render_template('newitem.html')
     if request.method == 'POST':
@@ -257,8 +264,8 @@ def editItem(item_name, item_id):
     if request.method == 'GET':
         return render_template('edititem.html', item=item)
 
-    # No access to edit item if it's not public and wasn't created by the user
-    if item.user_id is not None and login_session['user_id'] != item.user_id:
+    # No access to edit item if it wasn't created by the user
+    if login_session['user_id'] != item.user_id:
         flash('You are not authorised to edit this item.')
         return redirect(url_for(
             'iteminfo', category=item.category, item_name=item.name,
@@ -296,8 +303,8 @@ def deleteItem(item_name, item_id):
     if request.method == 'GET':
         return render_template('deleteitem.html', item=item)
 
-    # No access to delete item if it's not public was not created by the user
-    if item.user_id is not None and login_session['user_id'] != item.user_id:
+    # No access to delete item if it was not created by the user
+    if login_session['user_id'] != item.user_id:
         flash('You are not authorised to delete this item.')
         return redirect(url_for(
             'iteminfo', category=item.category, item_name=item.name,
