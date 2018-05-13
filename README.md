@@ -3,7 +3,8 @@
 ## Application Description
 
 A web application to display items in a catalog. It stores information about items from various categories. The items can be edited or deleted but this may require the user to login. Certain items can only be changed depending on user authentication and authorisation.
-===
+
+
 
 ## Requirements
 
@@ -22,7 +23,8 @@ A web application to display items in a catalog. It stores information about ite
 - populate_db.py file adds a user and several items in to the database if they are not already there
 - static folder includes styles.css file which has the styling for all current webpages
 - templates folder includes all html templates for each page. Most of the pages extend from baselayout.html
-===
+
+
 
 ## Installation
 
@@ -34,7 +36,8 @@ If you have your own clientID, replace the current one in login.html file
 ### Dependencies
 requirements.txt is available. 
 Run `pip install -r requirements.txt` if you have any missing dependencies to help your app run smoothly
-===
+
+
 
 ## Operating Instructions
 
