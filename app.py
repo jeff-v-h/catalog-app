@@ -268,7 +268,7 @@ def editItem(item_name, item_id):
     if login_session['user_id'] != item.user_id:
         flash('You are not authorised to edit this item.')
         return redirect(url_for(
-            'iteminfo', category=item.category, item_name=item.name,
+            'itemInfo', category=item.category, item_name=item.name,
             item_id=item.id))
 
     if request.method == 'POST':
@@ -307,7 +307,7 @@ def deleteItem(item_name, item_id):
     if login_session['user_id'] != item.user_id:
         flash('You are not authorised to delete this item.')
         return redirect(url_for(
-            'iteminfo', category=item.category, item_name=item.name,
+            'itemInfo', category=item.category, item_name=item.name,
             item_id=item.id))
 
     if request.method == 'POST':
