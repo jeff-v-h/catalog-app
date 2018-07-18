@@ -188,7 +188,7 @@ def itemJSON(item_name, item_id):
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/catalog/', methods=['GET', 'POST'])
 def catalog():
-    items_group_by_category = session.query(Item).group_by(Item.category).all()
+    items_group_by_category = session.query(Item.category).distinct()
     items_latest = session.query(Item).order_by(
         Item.modified_date.desc()).limit(10).all()
     if request.method == 'POST':
@@ -234,7 +234,7 @@ def newItem():
 # Page for viewing all items within a category
 @app.route('/catalog/<string:category>/items/', methods=['GET'])
 def categoryList(category):
-    items_group_by_category = session.query(Item).group_by(Item.category).all()
+    items_group_by_category = session.query(Item.category).distinct()
     items_in_category = session.query(Item).filter_by(category=category).all()
     return render_template(
         'categorylist.html',
